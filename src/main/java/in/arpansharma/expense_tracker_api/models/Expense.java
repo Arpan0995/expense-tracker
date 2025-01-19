@@ -2,8 +2,11 @@ package in.arpansharma.expense_tracker_api.models;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import java.math.BigDecimal;
+import java.sql.Timestamp;
 import java.util.Date;
 
 @Entity
@@ -25,6 +28,14 @@ public class Expense {
     private String category;
     @NotNull
     private Date date;
+
+    @Column(name = "create_ts", nullable = false,updatable = false)
+    @CreationTimestamp
+    private Timestamp createTs;
+
+    @Column(name = "update_ts")
+    @UpdateTimestamp
+    private Timestamp updateTs;
 
     public void setId(long id) {
         this.id = id;
@@ -72,5 +83,21 @@ public class Expense {
 
     public void setDate(Date date) {
         this.date = date;
+    }
+
+    public Timestamp getCreateTs() {
+        return createTs;
+    }
+
+    public Timestamp getUpdateTs() {
+        return updateTs;
+    }
+
+    public void setCreateTs(Timestamp createTs) {
+        this.createTs = createTs;
+    }
+
+    public void setUpdateTs(Timestamp updateTs) {
+        this.updateTs = updateTs;
     }
 }
