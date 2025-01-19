@@ -4,6 +4,7 @@ import in.arpansharma.expense_tracker_api.models.Expense;
 import in.arpansharma.expense_tracker_api.service.ExpService;
 import in.arpansharma.expense_tracker_api.service.ExpenseService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -26,11 +27,13 @@ public class ExpenseController {
         return expService.getExpenseById(id);
     }
 
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     @DeleteMapping("/delete")
     public void deleteExpense(@RequestParam("id") Long id){
         expService.deleteExpense(id);
     }
 
+    @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("/addExpense")
     public Expense addExpense(@RequestBody Expense expense){
         return expService.insertExpense(expense);
