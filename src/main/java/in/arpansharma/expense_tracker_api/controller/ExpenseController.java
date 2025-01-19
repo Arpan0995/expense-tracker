@@ -35,4 +35,9 @@ public class ExpenseController {
     public Expense addExpense(@RequestBody Expense expense){
         return expService.insertExpense(expense);
     }
+
+    @PutMapping("/updateExpense/{id}")
+    public Expense updateExpense(@RequestBody Expense expense, @PathVariable Long id){
+        return expService.updateExpense(id, expense);
+    }
 }

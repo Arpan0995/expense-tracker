@@ -13,4 +13,6 @@ public interface ExpService {
     public void deleteExpense(Long id);
 
     public Expense insertExpense(Expense expense);
+
+    public Expense updateExpense(Long id, Expense expense);
 }
