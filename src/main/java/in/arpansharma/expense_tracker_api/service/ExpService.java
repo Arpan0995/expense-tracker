@@ -12,5 +12,5 @@ public interface ExpService {
 
     public void deleteExpense(Long id);
 
-    public void insertExpense(Expense expense);
+    public Expense insertExpense(Expense expense);
 }

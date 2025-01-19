@@ -32,7 +32,7 @@ public class ExpenseController {
     }
 
     @PostMapping("/addExpense")
-    public void addExpense(@RequestBody Expense expense){
-        expService.insertExpense(expense);
+    public Expense addExpense(@RequestBody Expense expense){
+        return expService.insertExpense(expense);
     }
 }
