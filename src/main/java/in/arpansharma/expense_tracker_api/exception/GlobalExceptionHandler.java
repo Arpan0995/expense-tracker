@@ -14,7 +14,9 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 
 import java.sql.Timestamp;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @ControllerAdvice
 public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
@@ -55,9 +57,9 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         body.put("timestamp",new Timestamp(System.currentTimeMillis()));
         body.put("statusCode",HttpStatus.BAD_REQUEST.value());
 
-        String message  = ex.getBindingResult().getFieldError().getDefaultMessage();
+        List<String> erros  = ex.getBindingResult().getFieldErrors().stream().map(x -> x.getDefaultMessage()).collect(Collectors.toList());
 
-        body.put("message",message);
+        body.put("message",erros);
 
         return new ResponseEntity<Object>(body,HttpStatus.BAD_REQUEST);
     }
