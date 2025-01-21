@@ -2,6 +2,7 @@ package in.arpansharma.expense_tracker_api.models;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -17,7 +18,8 @@ public class Expense {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @NotNull
+    @NotNull(message = "Name cannot be null")
+    @Size(min = 3, message = "Name has to be at least 3 characters long")
     private String name;
 
     @NotNull

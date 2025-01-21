@@ -3,7 +3,9 @@ package in.arpansharma.expense_tracker_api.controller;
 import in.arpansharma.expense_tracker_api.models.Expense;
 import in.arpansharma.expense_tracker_api.service.ExpService;
 import in.arpansharma.expense_tracker_api.service.ExpenseService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -37,7 +39,7 @@ public class ExpenseController {
 
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("/addExpense")
-    public Expense addExpense(@RequestBody Expense expense){
+    public Expense addExpense(@Valid @RequestBody Expense expense){
         return expService.insertExpense(expense);
     }
 
