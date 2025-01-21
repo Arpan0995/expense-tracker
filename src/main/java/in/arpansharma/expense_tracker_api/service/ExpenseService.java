@@ -1,14 +1,12 @@
 package in.arpansharma.expense_tracker_api.service;
 
-import in.arpansharma.expense_tracker_api.exception.ExpenseNotFoundException;
+import in.arpansharma.expense_tracker_api.exception.ResourceNotFoundException;
 import in.arpansharma.expense_tracker_api.models.Expense;
 import in.arpansharma.expense_tracker_api.repository.ExpenseRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -31,7 +29,7 @@ public class ExpenseService implements ExpService {
         if(expense.isPresent()){
             return expense.get();
         }
-        throw new ExpenseNotFoundException("Expense does not exist");
+        throw new ResourceNotFoundException("Expense does not exist");
     }
 
     @Override

@@ -7,14 +7,13 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
 
-import java.sql.Time;
 import java.sql.Timestamp;
 
 @ControllerAdvice
 public class GlobalExceptionHandler {
 
-    @ExceptionHandler(ExpenseNotFoundException.class)
-    public ResponseEntity<ErrorObject> handleExpenseNotFoundException(ExpenseNotFoundException ex, WebRequest webRequest){
+    @ExceptionHandler(ResourceNotFoundException.class)
+    public ResponseEntity<ErrorObject> handleExpenseNotFoundException(ResourceNotFoundException ex, WebRequest webRequest){
         ErrorObject errorObject = new ErrorObject();
         errorObject.setStatusCode(HttpStatus.NOT_FOUND.value());
         errorObject.setMessage(ex.getMessage());
