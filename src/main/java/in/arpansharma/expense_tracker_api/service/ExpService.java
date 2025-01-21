@@ -19,4 +19,6 @@ public interface ExpService {
     public Expense updateExpense(Long id, Expense expense);
 
     public List<Expense> getByCategory(String category, Pageable page);
+
+    public List<Expense> getByName(String name, Pageable page);
 }

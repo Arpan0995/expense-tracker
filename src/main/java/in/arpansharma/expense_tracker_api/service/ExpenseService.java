@@ -59,4 +59,9 @@ public class ExpenseService implements ExpService {
     public List<Expense> getByCategory(String category, Pageable page) {
         return expenseRepository.findByCategory(category,page).toList();
     }
+
+    @Override
+    public List<Expense> getByName(String name, Pageable page) {
+        return expenseRepository.findByName(name,page).stream().toList();
+    }
 }

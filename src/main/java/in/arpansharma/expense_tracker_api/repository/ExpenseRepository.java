@@ -10,4 +10,6 @@ import org.springframework.stereotype.Repository;
 public interface ExpenseRepository extends JpaRepository<Expense,Long> {
 
     public Page<Expense> findByCategory(String category, Pageable page);
+
+    public Page<Expense> findByName(String name,Pageable page);
 }
