@@ -4,6 +4,8 @@ import in.arpansharma.expense_tracker_api.models.Expense;
 import in.arpansharma.expense_tracker_api.service.ExpService;
 import in.arpansharma.expense_tracker_api.service.ExpenseService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,8 +20,8 @@ public class ExpenseController {
         this.expService = expService;
     }
     @GetMapping("/expenses")
-    public List<Expense> fetchAllExpenses(){
-        return expService.getExpenses();
+    public Page<Expense> fetchAllExpenses(Pageable page){
+        return expService.getExpenses(page);
     }
 
     @GetMapping("/expenses/{id}")

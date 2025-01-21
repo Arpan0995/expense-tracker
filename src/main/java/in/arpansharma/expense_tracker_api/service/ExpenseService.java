@@ -3,6 +3,8 @@ package in.arpansharma.expense_tracker_api.service;
 import in.arpansharma.expense_tracker_api.models.Expense;
 import in.arpansharma.expense_tracker_api.repository.ExpenseRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -18,8 +20,8 @@ public class ExpenseService implements ExpService {
     }
 
     @Override
-    public List<Expense> getExpenses(){
-        return expenseRepository.findAll();
+    public Page<Expense> getExpenses(Pageable page){
+        return expenseRepository.findAll(page);
     }
 
     @Override
