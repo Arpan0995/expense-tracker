@@ -20,8 +20,8 @@ public class ExpenseController {
         this.expService = expService;
     }
     @GetMapping("/expenses")
-    public Page<Expense> fetchAllExpenses(Pageable page){
-        return expService.getExpenses(page);
+    public List<Expense> fetchAllExpenses(Pageable page){
+        return expService.getExpenses(page).toList();
     }
 
     @GetMapping("/expenses/{id}")
