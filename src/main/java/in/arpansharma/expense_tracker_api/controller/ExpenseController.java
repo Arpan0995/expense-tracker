@@ -18,7 +18,7 @@ import java.util.Date;
 import java.util.List;
 
 @RestController
-@Tag(name = "My Swagger", description = "How to use Expense APIs")
+@Tag(name = "Expense APIs", description = "How to use Expense APIs")
 public class ExpenseController {
 
     private final ExpService expService;
