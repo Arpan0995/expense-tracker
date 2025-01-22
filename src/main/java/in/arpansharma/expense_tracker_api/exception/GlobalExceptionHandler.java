@@ -35,7 +35,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     public ResponseEntity<ErrorObject> handleMethodArgumentTypeMismatchException(MethodArgumentTypeMismatchException ex, WebRequest webRequest){
         ErrorObject errorObject = new ErrorObject();
         errorObject.setStatusCode(HttpStatus.BAD_REQUEST.value());
-        errorObject.setMessage("Id can only be a number, please fix the id parameter " + ex.getMessage());
+        errorObject.setMessage("Please fix parameter " + ex.getMessage());
         errorObject.setTimestamp(new Timestamp(System.currentTimeMillis()));
 
         return new ResponseEntity<ErrorObject>(errorObject,HttpStatus.BAD_REQUEST);

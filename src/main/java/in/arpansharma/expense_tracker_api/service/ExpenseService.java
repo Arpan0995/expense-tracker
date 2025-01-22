@@ -6,7 +6,9 @@ import in.arpansharma.expense_tracker_api.repository.ExpenseRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestParam;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -62,6 +64,17 @@ public class ExpenseService implements ExpService {
 
     @Override
     public List<Expense> getByName(String name, Pageable page) {
-        return expenseRepository.findByName(name,page).stream().toList();
+        return expenseRepository.findByNameContaining(name,page).toList();
+    }
+
+    @Override
+    public List<Expense> getByDateRange(@RequestParam Date startDate,@RequestParam Date endDate, Pageable page) {
+        if(startDate == null){
+            startDate = new Date(0);
+        }
+        if(endDate == null){
+            endDate = new Date(System.currentTimeMillis());
+        }
+        return expenseRepository.findByDateBetween(startDate, endDate, page).toList();
     }
 }
