@@ -21,7 +21,7 @@ public class UserModel {
     private String password;
 
     @NotNull
-    private int age;
+    private Long age;
 
     public void setPassword(String password) {
         this.password = password;
@@ -31,7 +31,7 @@ public class UserModel {
         this.email = email;
     }
 
-    public void setAge(int age) {
+    public void setAge(Long age) {
         this.age = age;
     }
 
@@ -51,7 +51,7 @@ public class UserModel {
         return email;
     }
 
-    public int getAge() {
+    public Long getAge() {
         return age;
     }
 

@@ -8,4 +8,8 @@ public interface UserService {
     public User registerUser(UserModel userModel);
 
     public User readUser(Long id);
+
+    public User updateUser(User user,Long id);
+
+    public void deleteUser(Long id);
 }

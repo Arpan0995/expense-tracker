@@ -27,7 +27,7 @@ public class User {
     private String password;
 
     @NotNull
-    private int age;
+    private Long age;
 
     @CreationTimestamp
     private Timestamp createTs;
@@ -51,7 +51,7 @@ public class User {
         return id;
     }
 
-    public int getAge() {
+    public Long getAge() {
         return age;
     }
 
@@ -79,7 +79,7 @@ public class User {
         this.id = id;
     }
 
-    public void setAge(int age) {
+    public void setAge(Long age) {
         this.age = age;
     }
 
