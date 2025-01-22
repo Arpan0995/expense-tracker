@@ -1,15 +1,26 @@
 package in.arpansharma.expense_tracker_api.models;
 
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
+
 public class UserModel {
 
     private Long id;
 
+    @NotBlank(message = "Name cannot be blank")
     private String name;
 
+    @Email(message = "Please enter a valid email")
+    @NotBlank(message = "Email cannot be blank")
     private String email;
 
+    @Size(min = 4, message = "Password should have at least 4 characters.")
+    @NotBlank(message = "Password cannot be blank")
     private String password;
 
+    @NotNull
     private int age;
 
     public void setPassword(String password) {

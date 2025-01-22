@@ -5,6 +5,9 @@ import in.arpansharma.expense_tracker_api.models.UserModel;
 import in.arpansharma.expense_tracker_api.service.UserService;
 import in.arpansharma.expense_tracker_api.service.UserServiceImpl;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -20,7 +23,7 @@ public class UserController {
     }
 
     @PostMapping("/register")
-    public User registerUser(@RequestBody UserModel userModel){
-        return userService.registerUser(userModel);
+    public ResponseEntity<User> registerUser(@Valid @RequestBody UserModel userModel){
+        return new ResponseEntity<User>(userService.registerUser(userModel),HttpStatus.CREATED);
     }
 }
