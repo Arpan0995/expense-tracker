@@ -1,5 +1,6 @@
 package in.arpansharma.expense_tracker_api.service;
 
+import in.arpansharma.expense_tracker_api.exception.ItemAlreadyExistsException;
 import in.arpansharma.expense_tracker_api.models.User;
 import in.arpansharma.expense_tracker_api.models.UserModel;
 import in.arpansharma.expense_tracker_api.repository.UserRepository;
@@ -15,6 +16,9 @@ public class UserServiceImpl implements UserService{
     }
     @Override
     public User registerUser(UserModel userModel) {
+        if(userRepository.existsByemail(userModel.getEmail())){
+            throw new ItemAlreadyExistsException("Email already associated with another user.");
+        }
         User user = new User();
         BeanUtils.copyProperties(userModel,user);
         userRepository.save(user);

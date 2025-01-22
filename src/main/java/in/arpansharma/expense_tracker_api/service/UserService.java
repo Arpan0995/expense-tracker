@@ -6,4 +6,5 @@ import in.arpansharma.expense_tracker_api.models.UserModel;
 public interface UserService {
 
     public User registerUser(UserModel userModel);
+
 }
