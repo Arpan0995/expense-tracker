@@ -7,4 +7,5 @@ public interface UserService {
 
     public User registerUser(UserModel userModel);
 
+    public User readUser(Long id);
 }

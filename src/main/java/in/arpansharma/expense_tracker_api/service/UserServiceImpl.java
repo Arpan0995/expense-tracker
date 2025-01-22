@@ -1,6 +1,7 @@
 package in.arpansharma.expense_tracker_api.service;
 
 import in.arpansharma.expense_tracker_api.exception.ItemAlreadyExistsException;
+import in.arpansharma.expense_tracker_api.exception.ResourceNotFoundException;
 import in.arpansharma.expense_tracker_api.models.User;
 import in.arpansharma.expense_tracker_api.models.UserModel;
 import in.arpansharma.expense_tracker_api.repository.UserRepository;
@@ -23,5 +24,10 @@ public class UserServiceImpl implements UserService{
         BeanUtils.copyProperties(userModel,user);
         userRepository.save(user);
         return user;
+    }
+
+    @Override
+    public User readUser(Long id) {
+        return userRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Id does not exist"));
     }
 }
