@@ -1,15 +1,22 @@
 package in.arpansharma.expense_tracker_api.service;
 
+import in.arpansharma.expense_tracker_api.config.UserManagementConfig;
 import in.arpansharma.expense_tracker_api.exception.ItemAlreadyExistsException;
 import in.arpansharma.expense_tracker_api.exception.ResourceNotFoundException;
 import in.arpansharma.expense_tracker_api.models.User;
 import in.arpansharma.expense_tracker_api.models.UserModel;
 import in.arpansharma.expense_tracker_api.repository.UserRepository;
 import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
 public class UserServiceImpl implements UserService{
+
+    @Autowired
+    private PasswordEncoder bCryptPasswordEncoder;
 
     private final UserRepository userRepository;
     public UserServiceImpl(UserRepository userRepository){
@@ -22,6 +29,7 @@ public class UserServiceImpl implements UserService{
         }
         User user = new User();
         BeanUtils.copyProperties(userModel,user);
+        user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
         userRepository.save(user);
         return user;
     }
@@ -38,6 +46,7 @@ public class UserServiceImpl implements UserService{
         user1.setAge(user.getAge()!=null? user.getAge() : user1.getAge());
         user1.setEmail(user.getEmail()!=null? user.getEmail() : user1.getEmail());
         user1.setPassword(user.getPassword()!=null? user.getPassword() : user1.getPassword());
+        user1.setPassword(bCryptPasswordEncoder.encode(user1.getPassword()));
 
         userRepository.save(user1);
         return user1;
