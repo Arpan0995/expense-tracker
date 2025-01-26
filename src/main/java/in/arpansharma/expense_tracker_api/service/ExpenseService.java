@@ -17,8 +17,12 @@ public class ExpenseService implements ExpService {
 
     private final ExpenseRepository expenseRepository;
 
-    public ExpenseService(ExpenseRepository expenseRepository){
+    private final UserService userService;
+
+    public ExpenseService(ExpenseRepository expenseRepository,
+                          UserService userService){
         this.expenseRepository = expenseRepository;
+        this.userService = userService;
     }
 
     @Override
@@ -43,6 +47,7 @@ public class ExpenseService implements ExpService {
 
     @Override
     public Expense insertExpense(Expense expense) {
+        expense.setUser(userService.getLoggedInuser());
        return expenseRepository.save(expense);
     }
 

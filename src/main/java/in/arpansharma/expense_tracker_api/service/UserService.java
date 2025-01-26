@@ -12,4 +12,6 @@ public interface UserService {
     public User updateUser(User user,Long id);
 
     public void deleteUser(Long id);
+
+    public User getLoggedInuser();
 }

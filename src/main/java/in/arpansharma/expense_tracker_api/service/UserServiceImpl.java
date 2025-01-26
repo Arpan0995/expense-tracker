@@ -8,6 +8,10 @@ import in.arpansharma.expense_tracker_api.models.UserModel;
 import in.arpansharma.expense_tracker_api.repository.UserRepository;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -56,5 +60,17 @@ public class UserServiceImpl implements UserService{
     public void deleteUser(Long id) {
         readUser(id);
         userRepository.deleteById(id);
+    }
+
+    @Override
+    public User getLoggedInuser() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String email = authentication.getName();
+
+        User user = userRepository.findByEmail(email);
+        if(user == null){
+            throw new UsernameNotFoundException("Username Not Found");
+        }
+        return user;
     }
 }
