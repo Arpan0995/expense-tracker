@@ -27,12 +27,12 @@ public class ExpenseService implements ExpService {
 
     @Override
     public Page<Expense> getExpenses(Pageable page){
-        return expenseRepository.findAll(page);
+        return expenseRepository.findByUserId(userService.getLoggedInuser().getId(),page);
     }
 
     @Override
     public Expense getExpenseById(Long id) {
-        Optional<Expense> expense =  expenseRepository.findById(id);
+        Optional<Expense> expense =  expenseRepository.findByUserIdAndId(userService.getLoggedInuser().getId(), id);
         if(expense.isPresent()){
             return expense.get();
         }
