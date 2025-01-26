@@ -20,19 +20,19 @@ public class UserController {
     }
 
 
-    @GetMapping("/user/{id}")
-    public ResponseEntity<User> readUser(@PathVariable Long id){
-        return new ResponseEntity<User>(userService.readUser(id),HttpStatus.OK);
+    @GetMapping("/user")
+    public ResponseEntity<User> readUser(){
+        return new ResponseEntity<User>(userService.readUser(),HttpStatus.OK);
     }
 
-    @PutMapping("/updateUser/{id}")
-    public ResponseEntity<User> updateUser(@RequestBody User user, @PathVariable Long id){
-        return new ResponseEntity<User>(userService.updateUser(user,id),HttpStatus.OK);
+    @PutMapping("/updateUser")
+    public ResponseEntity<User> updateUser(@RequestBody User user){
+        return new ResponseEntity<User>(userService.updateUser(user),HttpStatus.OK);
     }
 
-    @DeleteMapping("/delete/{id}")
-    public ResponseEntity<HttpStatus> deleteUser(@PathVariable Long id){
-        userService.deleteUser(id);
+    @DeleteMapping("/deactivate")
+    public ResponseEntity<HttpStatus> deleteUser(){
+        userService.deleteUser();
         return new ResponseEntity<HttpStatus>(HttpStatus.NO_CONTENT);
     }
 }

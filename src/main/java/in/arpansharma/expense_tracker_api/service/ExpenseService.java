@@ -65,12 +65,12 @@ public class ExpenseService implements ExpService {
 
     @Override
     public List<Expense> getByCategory(String category, Pageable page) {
-        return expenseRepository.findByCategory(category,page).toList();
+        return expenseRepository.findByUserIdAndCategory(userService.getLoggedInuser().getId(),category,page).toList();
     }
 
     @Override
     public List<Expense> getByName(String name, Pageable page) {
-        return expenseRepository.findByNameContaining(name,page).toList();
+        return expenseRepository.findByUserIdAndNameContaining(userService.getLoggedInuser().getId(),name,page).toList();
     }
 
     @Override
@@ -81,6 +81,6 @@ public class ExpenseService implements ExpService {
         if(endDate == null){
             endDate = new Date(System.currentTimeMillis());
         }
-        return expenseRepository.findByDateBetween(startDate, endDate, page).toList();
+        return expenseRepository.findByUserIdAndDateBetween(userService.getLoggedInuser().getId(), startDate, endDate, page).toList();
     }
 }
