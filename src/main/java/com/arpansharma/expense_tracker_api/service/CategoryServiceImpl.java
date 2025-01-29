@@ -2,6 +2,7 @@ package com.arpansharma.expense_tracker_api.service;
 
 import com.arpansharma.expense_tracker_api.dto.CategoryDTO;
 import com.arpansharma.expense_tracker_api.dto.UserDTO;
+import com.arpansharma.expense_tracker_api.exception.ItemAlreadyExistsException;
 import com.arpansharma.expense_tracker_api.exception.ResourceNotFoundException;
 import com.arpansharma.expense_tracker_api.models.Category;
 import com.arpansharma.expense_tracker_api.models.User;
@@ -32,10 +33,13 @@ public class CategoryServiceImpl implements CategoryService{
 
     @Override
     public CategoryDTO createCategory(CategoryDTO categoryDTO) {
-        Category category = mapToCategory(categoryDTO);
-        categoryRepository.save(category);
-        return mapToDto(category);
-
+        if(categoryRepository.existsByNameAndUserId(categoryDTO.getName(),userService.getLoggedInuser().getId())){
+            throw new ItemAlreadyExistsException("A Category with this name already exists");
+        }else {
+            Category category = mapToCategory(categoryDTO);
+            categoryRepository.save(category);
+            return mapToDto(category);
+        }
     }
 
     @Override
