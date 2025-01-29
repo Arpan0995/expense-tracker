@@ -14,4 +14,4 @@ Run the server and browse to,<br/> localhost:8080/api/v1/swagger-ui/index.html
 
 ## Feedback
 
-Expense Tracker is developed by Arpan Sharma as part of a personal project. If you have any questions or feedback, feel free to reach out to me at arpans0995@gmail.com.
+This is a personal project developed by Arpan Sharma. For any questions or feedback, please reach out on arpans0995@gmail.com.
