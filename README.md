@@ -1,6 +1,6 @@
 ## Description
 
-Expense Tracker is an app for logging expenses by category. It's a great way to keep track of your spending and categorize the data to gain useful insights. This is a backend only App as of now and can be intreacted with using REST APIs.
+Expense Tracker is an app for logging expenses by category. It's a great way to keep track of your spending and categorize the data to gain useful insights. This is a backend only App as of now and can be interacted with only using REST APIs.
 
 ## Technologies Used
 
