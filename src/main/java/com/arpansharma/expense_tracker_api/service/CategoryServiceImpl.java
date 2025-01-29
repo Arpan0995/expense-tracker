@@ -2,6 +2,7 @@ package com.arpansharma.expense_tracker_api.service;
 
 import com.arpansharma.expense_tracker_api.dto.CategoryDTO;
 import com.arpansharma.expense_tracker_api.dto.UserDTO;
+import com.arpansharma.expense_tracker_api.exception.ResourceNotFoundException;
 import com.arpansharma.expense_tracker_api.models.Category;
 import com.arpansharma.expense_tracker_api.models.User;
 import com.arpansharma.expense_tracker_api.repository.CategoryRepository;
@@ -10,6 +11,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -34,6 +36,16 @@ public class CategoryServiceImpl implements CategoryService{
         categoryRepository.save(category);
         return mapToDto(category);
 
+    }
+
+    @Override
+    public void deleteCategory(String categoryId) {
+        Optional<Category> category = categoryRepository.findByUserIdAndCategoryId(userService.getLoggedInuser().getId(),categoryId);
+        if(category.isPresent()){
+            categoryRepository.delete(category.get());
+        }else{
+            throw new ResourceNotFoundException("Category does not exist");
+        }
     }
 
     private Category mapToCategory(CategoryDTO categoryDTO) {

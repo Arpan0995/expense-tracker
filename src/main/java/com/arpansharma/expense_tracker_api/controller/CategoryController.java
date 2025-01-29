@@ -6,9 +6,11 @@ import com.arpansharma.expense_tracker_api.models.CategoryRequest;
 import com.arpansharma.expense_tracker_api.models.CategoryResponse;
 import com.arpansharma.expense_tracker_api.service.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/categories")
@@ -17,6 +19,7 @@ public class CategoryController {
     @Autowired
     private CategoryService categoryService;
 
+    @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
     public CategoryResponse createCategory(@RequestBody CategoryRequest categoryRequest){
         CategoryDTO categoryDTO = mapToDto(categoryRequest);
@@ -41,8 +44,15 @@ public class CategoryController {
     }
 
     @GetMapping
-    public List<CategoryDTO> getAllCategories(){
-        return categoryService.getAllCategories();
+    public List<CategoryResponse> getAllCategories(){
+        List<CategoryDTO> categoryDTOList= categoryService.getAllCategories();
+        return categoryDTOList.stream().map(categoryDTO -> mapToResponse(categoryDTO)).collect(Collectors.toList());
+    }
+
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @DeleteMapping("/{categoryId}")
+    public void deleteCategory(@PathVariable String categoryId){
+        categoryService.deleteCategory(categoryId);
     }
 
 }
