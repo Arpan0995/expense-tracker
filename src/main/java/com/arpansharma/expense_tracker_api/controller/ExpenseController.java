@@ -1,6 +1,11 @@
 package com.arpansharma.expense_tracker_api.controller;
 
+import com.arpansharma.expense_tracker_api.dto.CategoryDTO;
+import com.arpansharma.expense_tracker_api.dto.ExpenseDTO;
+import com.arpansharma.expense_tracker_api.models.CategoryResponse;
 import com.arpansharma.expense_tracker_api.models.Expense;
+import com.arpansharma.expense_tracker_api.models.ExpenseRequest;
+import com.arpansharma.expense_tracker_api.models.ExpenseResponse;
 import com.arpansharma.expense_tracker_api.service.ExpService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -46,18 +51,49 @@ public class ExpenseController {
     }
 
     @Operation(summary = "Adding an Expense")
-    @ApiResponse(responseCode = "200",description = "Adds an expense")
+    @ApiResponse(responseCode = "201",description = "Adds an expense")
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("/addExpense")
-    public Expense addExpense(@Valid @RequestBody Expense expense){
-        return expService.insertExpense(expense);
+    public ExpenseResponse addExpense(@Valid @RequestBody ExpenseRequest expenseRequest){
+        ExpenseDTO expenseDTO = mapToExpenseDto(expenseRequest);
+        expenseDTO = expService.insertExpense(expenseDTO);
+        return maptoExpenseResponse(expenseDTO);
+    }
+
+    private ExpenseResponse maptoExpenseResponse(ExpenseDTO expenseDTO) {
+        return ExpenseResponse.builder().name(expenseDTO.getName())
+                .expenseId(expenseDTO.getExpenseId())
+                .description(expenseDTO.getDescription())
+                .amount(expenseDTO.getAmount())
+                .date(expenseDTO.getDate())
+                .categoryResponse(mapToCategoryResponse(expenseDTO.getCategoryDTO()))
+                .createdTs(expenseDTO.getCreatedTs())
+                .updatedTs(expenseDTO.getUpdatedTs())
+                .build();
+    }
+
+    private CategoryResponse mapToCategoryResponse(CategoryDTO categoryDTO) {
+        return CategoryResponse.builder().name(categoryDTO.getName())
+                .categoryId(categoryDTO.getCategoryId())
+                .build();
+    }
+
+    private ExpenseDTO mapToExpenseDto(@Valid ExpenseRequest expenseRequest) {
+       return ExpenseDTO.builder().name(expenseRequest.getName())
+                .description(expenseRequest.getDescription())
+                .amount(expenseRequest.getAmount())
+                .date(expenseRequest.getDate())
+                .categoryId(expenseRequest.getCategoryId())
+                .build();
     }
 
     @Operation(summary = "Updating an Expense")
     @ApiResponse(responseCode = "200",description = "Updates an expense")
     @PutMapping("/updateExpense/{id}")
-    public Expense updateExpense(@RequestBody Expense expense, @PathVariable Long id){
-        return expService.updateExpense(id, expense);
+    public ExpenseResponse updateExpense(@RequestBody ExpenseRequest expenseRequest, @PathVariable Long id){
+        ExpenseDTO expenseDTO = mapToExpenseDto(expenseRequest);
+        expenseDTO = expService.updateExpense(id, expenseDTO);
+        return maptoExpenseResponse(expenseDTO);
     }
 
     @Operation(summary = "Filter by Expense")

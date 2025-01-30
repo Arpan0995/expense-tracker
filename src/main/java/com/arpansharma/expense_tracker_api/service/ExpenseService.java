@@ -1,7 +1,11 @@
 package com.arpansharma.expense_tracker_api.service;
 
+import com.arpansharma.expense_tracker_api.dto.CategoryDTO;
+import com.arpansharma.expense_tracker_api.dto.ExpenseDTO;
 import com.arpansharma.expense_tracker_api.exception.ResourceNotFoundException;
+import com.arpansharma.expense_tracker_api.models.Category;
 import com.arpansharma.expense_tracker_api.models.Expense;
+import com.arpansharma.expense_tracker_api.repository.CategoryRepository;
 import com.arpansharma.expense_tracker_api.repository.ExpenseRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -11,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 public class ExpenseService implements ExpService {
@@ -19,10 +24,13 @@ public class ExpenseService implements ExpService {
 
     private final UserService userService;
 
+    private CategoryRepository categoryRepository;
+
     public ExpenseService(ExpenseRepository expenseRepository,
-                          UserService userService){
+                          UserService userService, CategoryRepository categoryRepository){
         this.expenseRepository = expenseRepository;
         this.userService = userService;
+        this.categoryRepository = categoryRepository;
     }
 
     @Override
@@ -46,21 +54,64 @@ public class ExpenseService implements ExpService {
     }
 
     @Override
-    public Expense insertExpense(Expense expense) {
+    public ExpenseDTO insertExpense(ExpenseDTO expenseDTO) {
+        Optional<Category> category = categoryRepository.findByUserIdAndCategoryId(userService.getLoggedInuser().getId(), expenseDTO.getCategoryId());
+        if(!category.isPresent()){
+            throw new ResourceNotFoundException("Category does not exist for id " + expenseDTO.getCategoryId());
+        }
+        Expense expense = mapToExpense(expenseDTO);
         expense.setUser(userService.getLoggedInuser());
-       return expenseRepository.save(expense);
+        expense.setCategory(category.get());
+        expenseRepository.save(expense);
+        return mapToExpenseDto(expense);
+
     }
 
-    @Override
-    public Expense updateExpense(Long id, Expense expense) {
-        Expense existingExpense = getExpenseById(id);
-        existingExpense.setName(expense.getName() != null? expense.getName():existingExpense.getName());
-        existingExpense.setDescription(expense.getDescription() != null?expense.getDescription(): existingExpense.getDescription());
-        existingExpense.setAmount(expense.getAmount() != null?expense.getAmount():existingExpense.getAmount());
-        existingExpense.setCategory(expense.getCategory() != null?expense.getCategory():existingExpense.getCategory());
-        existingExpense.setDate(expense.getDate() != null?expense.getDate():existingExpense.getDate());
+    private ExpenseDTO mapToExpenseDto(Expense expense) {
+        return ExpenseDTO.builder().name(expense.getName())
+                .description(expense.getDescription())
+                .amount(expense.getAmount())
+                .createdTs(expense.getCreateTs())
+                .updatedTs(expense.getUpdateTs())
+                .expenseId(UUID.randomUUID().toString())
+                .categoryDTO(mapToCategoryDto(expense.getCategory()))
+                .build();
+    }
 
-        return expenseRepository.save(existingExpense);
+    private CategoryDTO mapToCategoryDto(Category category) {
+        return CategoryDTO.builder().categoryId(category.getCategoryId())
+                .name(category.getName())
+                .build();
+    }
+
+    private Expense mapToExpense(ExpenseDTO expenseDTO) {
+       return Expense.builder().name(expenseDTO.getName())
+                .description(expenseDTO.getDescription())
+                .expenseId(expenseDTO.getExpenseId())
+                .amount(expenseDTO.getAmount())
+                .date(expenseDTO.getDate())
+                .build();
+    }
+
+
+    @Override
+    public ExpenseDTO updateExpense(Long id, ExpenseDTO expenseDTO) {
+        if(expenseDTO.getCategoryDTO() != null) {
+            Optional<Category> category = categoryRepository.findByUserIdAndCategoryId(userService.getLoggedInuser().getId(), expenseDTO.getCategoryId());
+            if (!category.isPresent()) {
+                throw new ResourceNotFoundException("Category does not exist, please create a category first.");
+            }
+        }
+        Expense existingExpense = getExpenseById(id);
+        existingExpense.setName(expenseDTO.getName() != null? expenseDTO.getName():existingExpense.getName());
+        existingExpense.setDescription(expenseDTO.getDescription() != null?expenseDTO.getDescription(): existingExpense.getDescription());
+        existingExpense.setAmount(expenseDTO.getAmount() != null?expenseDTO.getAmount():existingExpense.getAmount());
+        existingExpense.setDate(expenseDTO.getDate() != null?expenseDTO.getDate():existingExpense.getDate());
+
+
+        expenseRepository.save(existingExpense);
+
+        return expenseDTO;
     }
 
     @Override

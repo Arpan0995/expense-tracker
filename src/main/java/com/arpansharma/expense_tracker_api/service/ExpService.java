@@ -1,5 +1,6 @@
 package com.arpansharma.expense_tracker_api.service;
 
+import com.arpansharma.expense_tracker_api.dto.ExpenseDTO;
 import com.arpansharma.expense_tracker_api.models.Expense;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -15,9 +16,9 @@ public interface ExpService {
 
     public void deleteExpense(Long id);
 
-    public Expense insertExpense(Expense expense);
+    public ExpenseDTO insertExpense(ExpenseDTO expenseDTO);
 
-    public Expense updateExpense(Long id, Expense expense);
+    public ExpenseDTO updateExpense(Long id, ExpenseDTO expenseDTO);
 
     public List<Expense> getByCategory(String category, Pageable page);
 

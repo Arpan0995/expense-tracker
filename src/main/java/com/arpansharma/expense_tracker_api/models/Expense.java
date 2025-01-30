@@ -5,6 +5,9 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
@@ -12,15 +15,21 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 import java.math.BigDecimal;
 import java.sql.Timestamp;
-import java.util.Date;
+import java.sql.Date;
 
 @Entity
 @Table(name = "expenses")
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class Expense {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
+
+    @Column(unique = true)
+    private String expenseId;
 
     @NotBlank(message = "Name cannot be null")
     @Size(min = 3, message = "Name has to be at least 3 characters long")
@@ -31,8 +40,10 @@ public class Expense {
     @NotNull(message = "Amount cannot be null")
     private BigDecimal amount;
 
-    @NotBlank(message = "Category cannot be blank")
-    private String category;
+    @ManyToOne(fetch = FetchType.LAZY,optional = false)
+    @JoinColumn(name = "category_id",nullable = false)
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    private Category category;
 
     @NotNull(message = "Date cannot be null")
     private Date date;
@@ -83,11 +94,11 @@ public class Expense {
         this.amount = amount;
     }
 
-    public String getCategory() {
+    public Category getCategory() {
         return category;
     }
 
-    public void setCategory(String category) {
+    public void setCategory(Category category) {
         this.category = category;
     }
 
