@@ -1,6 +1,6 @@
 package com.arpansharma.expense_tracker_api.controller;
 
-import com.arpansharma.expense_tracker_api.models.JwtResponse;
+import com.arpansharma.expense_tracker_api.io.JwtResponse;
 import com.arpansharma.expense_tracker_api.models.LoginReq;
 import com.arpansharma.expense_tracker_api.models.User;
 import com.arpansharma.expense_tracker_api.models.UserModel;

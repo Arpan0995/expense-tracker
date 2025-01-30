@@ -1,4 +1,4 @@
-package com.arpansharma.expense_tracker_api.models;
+package com.arpansharma.expense_tracker_api.io;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;

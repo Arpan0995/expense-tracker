@@ -1,6 +1,5 @@
 package com.arpansharma.expense_tracker_api.dto;
 
-import com.arpansharma.expense_tracker_api.models.CategoryResponse;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

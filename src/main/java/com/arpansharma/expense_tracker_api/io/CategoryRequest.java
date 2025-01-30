@@ -1,4 +1,4 @@
-package com.arpansharma.expense_tracker_api.models;
+package com.arpansharma.expense_tracker_api.io;
 
 public class CategoryRequest {
     private String name;

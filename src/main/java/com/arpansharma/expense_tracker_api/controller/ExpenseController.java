@@ -2,10 +2,10 @@ package com.arpansharma.expense_tracker_api.controller;
 
 import com.arpansharma.expense_tracker_api.dto.CategoryDTO;
 import com.arpansharma.expense_tracker_api.dto.ExpenseDTO;
-import com.arpansharma.expense_tracker_api.models.CategoryResponse;
+import com.arpansharma.expense_tracker_api.io.CategoryResponse;
 import com.arpansharma.expense_tracker_api.models.Expense;
-import com.arpansharma.expense_tracker_api.models.ExpenseRequest;
-import com.arpansharma.expense_tracker_api.models.ExpenseResponse;
+import com.arpansharma.expense_tracker_api.io.ExpenseRequest;
+import com.arpansharma.expense_tracker_api.io.ExpenseResponse;
 import com.arpansharma.expense_tracker_api.service.ExpService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;

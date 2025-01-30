@@ -1,9 +1,8 @@
 package com.arpansharma.expense_tracker_api.controller;
 
 import com.arpansharma.expense_tracker_api.dto.CategoryDTO;
-import com.arpansharma.expense_tracker_api.models.Category;
-import com.arpansharma.expense_tracker_api.models.CategoryRequest;
-import com.arpansharma.expense_tracker_api.models.CategoryResponse;
+import com.arpansharma.expense_tracker_api.io.CategoryRequest;
+import com.arpansharma.expense_tracker_api.io.CategoryResponse;
 import com.arpansharma.expense_tracker_api.service.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
