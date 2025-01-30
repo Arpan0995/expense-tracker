@@ -18,6 +18,6 @@ public interface ExpenseRepository extends JpaRepository<Expense,Long> {
 
     public Page<Expense> findByUserId(Long user_id, Pageable page);
 
-    public Optional<Expense> findByUserIdAndId(Long user_id, Long id);
+    public Optional<Expense> findByUserIdAndExpenseId(Long user_id, String expenseId);
 
 }

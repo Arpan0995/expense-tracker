@@ -16,6 +16,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 public class ExpenseService implements ExpService {
@@ -34,23 +35,31 @@ public class ExpenseService implements ExpService {
     }
 
     @Override
-    public Page<Expense> getExpenses(Pageable page){
-        return expenseRepository.findByUserId(userService.getLoggedInuser().getId(),page);
+    public List<ExpenseDTO> getExpenses(Pageable page){
+        List<Expense> expenses = expenseRepository.findByUserId(userService.getLoggedInuser().getId(),page).toList();
+        List<ExpenseDTO> expenseDTOS = expenses.stream().map(expense -> mapToExpenseDto(expense)).collect(Collectors.toList());
+        return  expenseDTOS;
     }
 
     @Override
-    public Expense getExpenseById(Long id) {
-        Optional<Expense> expense =  expenseRepository.findByUserIdAndId(userService.getLoggedInuser().getId(), id);
-        if(expense.isPresent()){
-            return expense.get();
+    public ExpenseDTO getExpenseById(String expenseId) {
+        Expense expense = getExpense(expenseId);
+        ExpenseDTO expenseDTO = mapToExpenseDto(expense);
+        return expenseDTO;
+    }
+
+    private Expense getExpense(String expenseId) {
+        Optional<Expense> expense =  expenseRepository.findByUserIdAndExpenseId(userService.getLoggedInuser().getId(), expenseId);
+        if(!expense.isPresent()){
+            throw new ResourceNotFoundException("Expense does not exist with id: " + expenseId);
         }
-        throw new ResourceNotFoundException("Expense does not exist");
+        return expense.get();
     }
 
     @Override
-    public void deleteExpense(Long id) {
-        getExpenseById(id);
-        expenseRepository.deleteById(id);
+    public void deleteExpense(String expenseId) {
+        Expense expense = getExpense(expenseId);
+        expenseRepository.delete(expense);
     }
 
     @Override
@@ -73,7 +82,7 @@ public class ExpenseService implements ExpService {
                 .amount(expense.getAmount())
                 .createdTs(expense.getCreateTs())
                 .updatedTs(expense.getUpdateTs())
-                .expenseId(UUID.randomUUID().toString())
+                .expenseId(expense.getExpenseId())
                 .categoryDTO(mapToCategoryDto(expense.getCategory()))
                 .build();
     }
@@ -87,7 +96,7 @@ public class ExpenseService implements ExpService {
     private Expense mapToExpense(ExpenseDTO expenseDTO) {
        return Expense.builder().name(expenseDTO.getName())
                 .description(expenseDTO.getDescription())
-                .expenseId(expenseDTO.getExpenseId())
+                .expenseId(UUID.randomUUID().toString())
                 .amount(expenseDTO.getAmount())
                 .date(expenseDTO.getDate())
                 .build();
@@ -95,14 +104,15 @@ public class ExpenseService implements ExpService {
 
 
     @Override
-    public ExpenseDTO updateExpense(Long id, ExpenseDTO expenseDTO) {
+    public ExpenseDTO updateExpense(String id, ExpenseDTO expenseDTO) {
         if(expenseDTO.getCategoryDTO() != null) {
             Optional<Category> category = categoryRepository.findByUserIdAndCategoryId(userService.getLoggedInuser().getId(), expenseDTO.getCategoryId());
             if (!category.isPresent()) {
                 throw new ResourceNotFoundException("Category does not exist, please create a category first.");
             }
         }
-        Expense existingExpense = getExpenseById(id);
+        ExpenseDTO existingExpenseDto = getExpenseById(id);
+        Expense existingExpense = mapToExpense(existingExpenseDto);
         existingExpense.setName(expenseDTO.getName() != null? expenseDTO.getName():existingExpense.getName());
         existingExpense.setDescription(expenseDTO.getDescription() != null?expenseDTO.getDescription(): existingExpense.getDescription());
         existingExpense.setAmount(expenseDTO.getAmount() != null?expenseDTO.getAmount():existingExpense.getAmount());

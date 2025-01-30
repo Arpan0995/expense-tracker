@@ -10,15 +10,15 @@ import java.util.List;
 
 public interface ExpService {
 
-    public Page<Expense> getExpenses(Pageable page);
+    public List<ExpenseDTO> getExpenses(Pageable page);
 
-    public Expense getExpenseById(Long id);
+    public ExpenseDTO getExpenseById(String expenseId);
 
-    public void deleteExpense(Long id);
+    public void deleteExpense(String expenseId);
 
     public ExpenseDTO insertExpense(ExpenseDTO expenseDTO);
 
-    public ExpenseDTO updateExpense(Long id, ExpenseDTO expenseDTO);
+    public ExpenseDTO updateExpense(String expenseId, ExpenseDTO expenseDTO);
 
     public List<Expense> getByCategory(String category, Pageable page);
 

@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @Tag(name = "Expense APIs", description = "How to use Expense APIs")
@@ -31,22 +32,26 @@ public class ExpenseController {
     @Operation(summary = "All Expenses")
     @ApiResponse(responseCode = "200",description = "List of All Expenses")
     @GetMapping("/allExpenses")
-    public List<Expense> fetchAllExpenses(Pageable page){
-        return expService.getExpenses(page).toList();
+    public List<ExpenseResponse> fetchAllExpenses(Pageable page){
+        List<ExpenseDTO> expenseDTOS = expService.getExpenses(page);
+        List<ExpenseResponse> expenseResponses = expenseDTOS.stream().map(expenseDTO -> maptoExpenseResponse(expenseDTO)).collect(Collectors.toList());
+        return expenseResponses;
     }
 
     @Operation(summary = "Expense Info")
     @ApiResponse(responseCode = "200",description = "Expense Info")
-    @GetMapping("/expenses/{id}")
-    public Expense fetchExpenseById(@PathVariable Long id){
-        return expService.getExpenseById(id);
+    @GetMapping("/expenses/{expenseId}")
+    public ExpenseResponse fetchExpenseById(@PathVariable String expenseId){
+        ExpenseDTO expenseDTO = expService.getExpenseById(expenseId);
+        ExpenseResponse expenseResponse = maptoExpenseResponse(expenseDTO);
+        return expenseResponse;
     }
 
     @Operation(summary = "Delete an expense")
     @ApiResponse(responseCode = "200",description = "Deleting an expense")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @DeleteMapping("/delete")
-    public void deleteExpense(@RequestParam("id") Long id){
+    public void deleteExpense(@RequestParam("id") String id){
         expService.deleteExpense(id);
     }
 
@@ -90,7 +95,7 @@ public class ExpenseController {
     @Operation(summary = "Updating an Expense")
     @ApiResponse(responseCode = "200",description = "Updates an expense")
     @PutMapping("/updateExpense/{id}")
-    public ExpenseResponse updateExpense(@RequestBody ExpenseRequest expenseRequest, @PathVariable Long id){
+    public ExpenseResponse updateExpense(@RequestBody ExpenseRequest expenseRequest, @PathVariable String id){
         ExpenseDTO expenseDTO = mapToExpenseDto(expenseRequest);
         expenseDTO = expService.updateExpense(id, expenseDTO);
         return maptoExpenseResponse(expenseDTO);

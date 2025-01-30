@@ -66,6 +66,14 @@ public class Expense {
         this.id = id;
     }
 
+    public String getExpenseId() {
+        return expenseId;
+    }
+
+    public void setExpenseId(String expenseId) {
+        this.expenseId = expenseId;
+    }
+
     public long getId() {
         return id;
     }
