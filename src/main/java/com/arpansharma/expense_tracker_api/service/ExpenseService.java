@@ -90,6 +90,9 @@ public class ExpenseService implements ExpService {
     private CategoryDTO mapToCategoryDto(Category category) {
         return CategoryDTO.builder().categoryId(category.getCategoryId())
                 .name(category.getName())
+                .description(category.getDescription())
+                .createdTs(category.getCreatedTs())
+                .updatedTs(category.getUpdatedTs())
                 .build();
     }
 
@@ -104,15 +107,14 @@ public class ExpenseService implements ExpService {
 
 
     @Override
-    public ExpenseDTO updateExpense(String id, ExpenseDTO expenseDTO) {
+    public ExpenseDTO updateExpense(String expenseId, ExpenseDTO expenseDTO) {
         if(expenseDTO.getCategoryDTO() != null) {
             Optional<Category> category = categoryRepository.findByUserIdAndCategoryId(userService.getLoggedInuser().getId(), expenseDTO.getCategoryId());
             if (!category.isPresent()) {
                 throw new ResourceNotFoundException("Category does not exist, please create a category first.");
             }
         }
-        ExpenseDTO existingExpenseDto = getExpenseById(id);
-        Expense existingExpense = mapToExpense(existingExpenseDto);
+        Expense existingExpense = getExpense(expenseId);
         existingExpense.setName(expenseDTO.getName() != null? expenseDTO.getName():existingExpense.getName());
         existingExpense.setDescription(expenseDTO.getDescription() != null?expenseDTO.getDescription(): existingExpense.getDescription());
         existingExpense.setAmount(expenseDTO.getAmount() != null?expenseDTO.getAmount():existingExpense.getAmount());
@@ -120,6 +122,7 @@ public class ExpenseService implements ExpService {
 
 
         expenseRepository.save(existingExpense);
+        expenseDTO = mapToExpenseDto(existingExpense);
 
         return expenseDTO;
     }

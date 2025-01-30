@@ -80,6 +80,9 @@ public class ExpenseController {
     private CategoryResponse mapToCategoryResponse(CategoryDTO categoryDTO) {
         return CategoryResponse.builder().name(categoryDTO.getName())
                 .categoryId(categoryDTO.getCategoryId())
+                .description(categoryDTO.getDescription())
+                .createdTs(categoryDTO.getCreatedTs())
+                .updatedTs(categoryDTO.getUpdatedTs())
                 .build();
     }
 
@@ -94,10 +97,10 @@ public class ExpenseController {
 
     @Operation(summary = "Updating an Expense")
     @ApiResponse(responseCode = "200",description = "Updates an expense")
-    @PutMapping("/updateExpense/{id}")
-    public ExpenseResponse updateExpense(@RequestBody ExpenseRequest expenseRequest, @PathVariable String id){
+    @PutMapping("/updateExpense/{expenseId}")
+    public ExpenseResponse updateExpense(@RequestBody ExpenseRequest expenseRequest, @PathVariable String expenseId){
         ExpenseDTO expenseDTO = mapToExpenseDto(expenseRequest);
-        expenseDTO = expService.updateExpense(id, expenseDTO);
+        expenseDTO = expService.updateExpense(expenseId, expenseDTO);
         return maptoExpenseResponse(expenseDTO);
     }
 
