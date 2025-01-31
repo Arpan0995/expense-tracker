@@ -8,7 +8,6 @@ import com.arpansharma.expense_tracker_api.models.Category;
 import com.arpansharma.expense_tracker_api.models.User;
 import com.arpansharma.expense_tracker_api.repository.CategoryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -19,11 +18,14 @@ import java.util.stream.Collectors;
 @Service
 public class CategoryServiceImpl implements CategoryService{
 
-    @Autowired
-    private CategoryRepository categoryRepository;
+    private final CategoryRepository categoryRepository;
 
-    @Autowired
-    private UserService userService;
+    private final UserService userService;
+
+    public CategoryServiceImpl(CategoryRepository categoryRepository, UserService userService){
+        this.categoryRepository = categoryRepository;
+        this.userService = userService;
+    }
 
     @Override
     public List<CategoryDTO> getAllCategories() {
