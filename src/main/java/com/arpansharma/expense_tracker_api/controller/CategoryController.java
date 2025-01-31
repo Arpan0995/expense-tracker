@@ -3,6 +3,7 @@ package com.arpansharma.expense_tracker_api.controller;
 import com.arpansharma.expense_tracker_api.dto.CategoryDTO;
 import com.arpansharma.expense_tracker_api.io.CategoryRequest;
 import com.arpansharma.expense_tracker_api.io.CategoryResponse;
+import com.arpansharma.expense_tracker_api.mappers.CategoryMapper;
 import com.arpansharma.expense_tracker_api.service.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -18,34 +19,21 @@ public class CategoryController {
     @Autowired
     private CategoryService categoryService;
 
+    @Autowired
+    private CategoryMapper categoryMapper;
+
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
     public CategoryResponse createCategory(@RequestBody CategoryRequest categoryRequest){
-        CategoryDTO categoryDTO = mapToDto(categoryRequest);
+        CategoryDTO categoryDTO = categoryMapper.mapToDto(categoryRequest);
         categoryDTO = categoryService.createCategory(categoryDTO);
-        return mapToResponse(categoryDTO);
-    }
-
-    private CategoryResponse mapToResponse(CategoryDTO categoryDTO) {
-        CategoryResponse categoryResponse = new CategoryResponse();
-        categoryResponse.setCategoryId(categoryDTO.getCategoryId());
-        categoryResponse.setName(categoryDTO.getName());
-        categoryResponse.setDescription(categoryDTO.getDescription());
-        categoryResponse.setCreatedTs(categoryDTO.getCreatedTs());
-        categoryResponse.setUpdatedTs(categoryDTO.getUpdatedTs());
-        return categoryResponse;
-    }
-
-    private CategoryDTO mapToDto(CategoryRequest categoryRequest) {
-        return CategoryDTO.builder().name(categoryRequest.getName())
-                .description(categoryRequest.getDescription())
-                .build();
+        return categoryMapper.mapToResponse(categoryDTO);
     }
 
     @GetMapping
     public List<CategoryResponse> getAllCategories(){
         List<CategoryDTO> categoryDTOList= categoryService.getAllCategories();
-        return categoryDTOList.stream().map(categoryDTO -> mapToResponse(categoryDTO)).collect(Collectors.toList());
+        return categoryDTOList.stream().map(categoryDTO -> categoryMapper.mapToResponse(categoryDTO)).collect(Collectors.toList());
     }
 
     @ResponseStatus(HttpStatus.NO_CONTENT)
