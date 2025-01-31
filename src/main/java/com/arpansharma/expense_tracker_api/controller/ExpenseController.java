@@ -107,21 +107,27 @@ public class ExpenseController {
     @Operation(summary = "Filter by Expense")
     @ApiResponse(responseCode = "200",description = "Filter by expense")
     @GetMapping("/expenses/category")
-    public List<Expense> getByCategory(@RequestParam String category, Pageable page){
-        return expService.getByCategory(category,page).stream().toList();
+    public List<ExpenseResponse> getByCategory(@RequestParam String categoryId, Pageable page){
+        List<ExpenseDTO> expenseDTOS = expService.getByCategory(categoryId,page).stream().toList();
+        List<ExpenseResponse> expenseResponses = expenseDTOS.stream().map(expenseDTO -> maptoExpenseResponse(expenseDTO)).collect(Collectors.toList());
+        return expenseResponses;
     }
 
     @Operation(summary = "Filter by Name")
     @ApiResponse(responseCode = "200",description = "Filter by name")
     @GetMapping("/expenses/name")
-    public List<Expense> getByName(@RequestParam String name, Pageable page){
-        return expService.getByName(name, page).stream().toList();
+    public List<ExpenseResponse> getByName(@RequestParam String name, Pageable page){
+        List<ExpenseDTO> expenseDTOS =  expService.getByName(name, page).stream().toList();
+        List<ExpenseResponse> expenseResponses = expenseDTOS.stream().map(expenseDTO -> maptoExpenseResponse(expenseDTO)).collect(Collectors.toList());
+        return  expenseResponses;
     }
 
     @Operation(summary = "Filter by Date")
     @ApiResponse(responseCode = "200",description = "Filter by date")
     @GetMapping("/expenses/date")
-    public List<Expense> getByDateRange(@RequestParam(required = false) Date startDate,@RequestParam(required = false) Date endDate, Pageable page){
-        return expService.getByDateRange(startDate,endDate,page).stream().toList();
+    public List<ExpenseResponse> getByDateRange(@RequestParam(required = false) Date startDate,@RequestParam(required = false) Date endDate, Pageable page){
+        List<ExpenseDTO> expenseDTOS = expService.getByDateRange(startDate,endDate,page).stream().toList();
+        List<ExpenseResponse> expenseResponses = expenseDTOS.stream().map(expenseDTO -> maptoExpenseResponse(expenseDTO)).collect(Collectors.toList());
+        return expenseResponses;
     }
 }

@@ -7,7 +7,6 @@ import com.arpansharma.expense_tracker_api.models.Category;
 import com.arpansharma.expense_tracker_api.models.Expense;
 import com.arpansharma.expense_tracker_api.repository.CategoryRepository;
 import com.arpansharma.expense_tracker_api.repository.ExpenseRepository;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -26,6 +25,7 @@ public class ExpenseService implements ExpService {
     private final UserService userService;
 
     private CategoryRepository categoryRepository;
+
 
     public ExpenseService(ExpenseRepository expenseRepository,
                           UserService userService, CategoryRepository categoryRepository){
@@ -128,23 +128,33 @@ public class ExpenseService implements ExpService {
     }
 
     @Override
-    public List<Expense> getByCategory(String category, Pageable page) {
-        return expenseRepository.findByUserIdAndCategory(userService.getLoggedInuser().getId(),category,page).toList();
+    public List<ExpenseDTO> getByCategory(String categoryId, Pageable page) {
+        Optional<Category> category = categoryRepository.findByUserIdAndCategoryId(userService.getLoggedInuser().getId(),categoryId);
+        if(!category.isPresent()){
+            throw new ResourceNotFoundException("No category with category id: " + categoryId);
+        }
+        List<Expense> expenses = expenseRepository.findByUserIdAndCategory(userService.getLoggedInuser().getId(),category.get(),page).toList();
+        List<ExpenseDTO> expenseDTOS = expenses.stream().map(expense -> mapToExpenseDto(expense)).collect(Collectors.toList());
+        return  expenseDTOS;
     }
 
     @Override
-    public List<Expense> getByName(String name, Pageable page) {
-        return expenseRepository.findByUserIdAndNameContaining(userService.getLoggedInuser().getId(),name,page).toList();
+    public List<ExpenseDTO> getByName(String name, Pageable page) {
+        List<Expense> expense = expenseRepository.findByUserIdAndNameContaining(userService.getLoggedInuser().getId(),name,page).toList();
+        List<ExpenseDTO> expenseDTOS = expense.stream().map(expense1 -> mapToExpenseDto(expense1)).collect(Collectors.toList());
+        return  expenseDTOS;
     }
 
     @Override
-    public List<Expense> getByDateRange(@RequestParam Date startDate,@RequestParam Date endDate, Pageable page) {
+    public List<ExpenseDTO> getByDateRange(@RequestParam Date startDate,@RequestParam Date endDate, Pageable page) {
         if(startDate == null){
             startDate = new Date(0);
         }
         if(endDate == null){
             endDate = new Date(System.currentTimeMillis());
         }
-        return expenseRepository.findByUserIdAndDateBetween(userService.getLoggedInuser().getId(), startDate, endDate, page).toList();
+        List<Expense> expense = expenseRepository.findByUserIdAndDateBetween(userService.getLoggedInuser().getId(), startDate, endDate, page).toList();
+        List<ExpenseDTO> expenseDTOS = expense.stream().map(expense1 -> mapToExpenseDto(expense1)).collect(Collectors.toList());
+        return expenseDTOS;
     }
 }

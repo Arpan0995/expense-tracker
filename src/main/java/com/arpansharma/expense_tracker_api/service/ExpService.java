@@ -20,9 +20,9 @@ public interface ExpService {
 
     public ExpenseDTO updateExpense(String expenseId, ExpenseDTO expenseDTO);
 
-    public List<Expense> getByCategory(String category, Pageable page);
+    public List<ExpenseDTO> getByCategory(String categoryId, Pageable page);
 
-    public List<Expense> getByName(String name, Pageable page);
+    public List<ExpenseDTO> getByName(String name, Pageable page);
 
-    public List<Expense> getByDateRange(Date startDate, Date endDate, Pageable page);
+    public List<ExpenseDTO> getByDateRange(Date startDate, Date endDate, Pageable page);
 }

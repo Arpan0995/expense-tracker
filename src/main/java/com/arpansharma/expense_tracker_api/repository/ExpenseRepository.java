@@ -1,5 +1,6 @@
 package com.arpansharma.expense_tracker_api.repository;
 
+import com.arpansharma.expense_tracker_api.models.Category;
 import com.arpansharma.expense_tracker_api.models.Expense;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -10,7 +11,7 @@ import java.util.Optional;
 
 public interface ExpenseRepository extends JpaRepository<Expense,Long> {
 
-    public Page<Expense> findByUserIdAndCategory(Long userId, String category, Pageable page);
+    public Page<Expense> findByUserIdAndCategory(Long userId, Category category, Pageable page);
 
     public Page<Expense> findByUserIdAndNameContaining(Long userId, String name, Pageable page);
 
